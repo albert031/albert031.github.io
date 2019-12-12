@@ -6,7 +6,7 @@ body{
     line-height:1.5;
     padding:0;
     margin:0;
-    background-color:#f4f4f4;
+    background-color:#e6f7ff;
 }
 
 /* Global */
@@ -30,29 +30,77 @@ ul {
     color:#ffffff;
 }
 
-
+@keyframes rainbow{
+    0% {color:red;}
+    17% {color:orange;}
+    34% {color:yellow;}
+    50% {color:green;}
+    67% {color:blue;}
+    84% {color:indigo;}
+    100% {color:violet;}
+}
 
 /* Header */
 header{
-    background:#35424a;
+    background:#353c40;
     color:#ffffff;
     padding-top:30px;
     min-height:70px;
-    border-bottom:#ff4444 3px solid;
+    border-bottom: #ff4444 3px solid;
+    list-style:none;
 }
 
 header a{
-    color:#ffffff;
     text-decoration:none;
     text-transform:uppercase;
-    font-size:16px;
+    color:#ffffff;
 }
 
+header nav{
+    width:80%;
+    margin:auto;
+}
 
-header li{
-    float:left;
-    display:inline;
-    padding: 0 20px 0 20px;
+.dropbtn {
+  background-color: transparent;
+  outline:none;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a{
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 header #branding{
@@ -63,13 +111,8 @@ header #branding h1{
     margin:0;
 }
 
-header nav{
-    float:right;
-    margin-top:10px;
-}
-
 header .highlight, header .current a{
-    color:#ff4444;
+    animation:rainbow 2s linear infinite alternate;
     font-weight:bold;
 }
 
@@ -81,7 +124,7 @@ header a:hover{
 /* Showcase */
 #showcase{
     min-height:400px;
-    background-image:url(https://upload.wikimedia.org/wikipedia/commons/7/73/Mama_instant_noodle_block.jpg);
+    background-image:url(../img/ramenpic.jpg);
     background-position:center center;
     background-repeat:no-repeat;
     text-align:center;
@@ -101,7 +144,7 @@ header a:hover{
 #order{
     padding:15px;
     color:#ffffff;
-    background:#35424a;
+    background:#353c40;
 }
 
 /* Order */
@@ -136,13 +179,6 @@ header a:hover{
     width:150px;
 }
 
-/* Sidebar */
-aside#sidebar{
-    float:right;
-    width:30%;
-    margin-top:10px;
-}
-
 /* Main-col */
 article#main-col{
     float:left;
@@ -157,13 +193,58 @@ footer{
     text-align:center;
 }
 
+/* Boxes around each project */
+.project{
+	background-color: #353c40;
+	font-size: 100%;
+	padding: 1%;
+	width: 320px;
+	height: 320px;
+	float: left;
+	text-align:center;
+	border-radius: 5px;
+	margin:1%;
+}
+
+.project a{
+	color:#ffffff;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.project h1{
+    color:#ffffff;
+}
+
+.project iframe{
+    width:100%;
+}
+
+.project img{
+    width:100%;
+}
+
+.project a:hover{
+    color:#ff0000;
+    font-weight:bold;
+}
+
+/* Game aligning */
+#canvas{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display:block;
+    
+}
 /* Media Queries */
 @media(max-width:768px){
     header #branding,
     header nav,
     header nav li,
-    #preorder h1,
-    #preorder form,
+    #order h1,
+    #order form,
     #boxes .box{
         float:none;
         text-align:center;
@@ -178,13 +259,13 @@ footer{
         margin-top:40px;
     }
     
-    #preorder button{
+    #order button{
         display:block;
         width:100%;
     }
     
-    #preorder form input[type=name]{
+    #order form input[type=name]{
         width:100%;
-        margin-botom:5px
+        margin-bottom:5px
     }
 }

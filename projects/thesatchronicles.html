@@ -1,0 +1,185 @@
+<!DOCTYPE HTML w/ Processing>
+
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Albert's Website | The SAT Chronicles</title>
+      <link rel=icon href=https://thewolfpacket.org/wp-content/uploads/2018/01/VP-675x900.jpg type=image/jpg?>
+      <script type="text/javascript" src="../js/processing.js"></script>
+      <meta name=viewport content=width=device-width>
+      <link rel=stylesheet type=text/css href=../css/style.css>
+  </head>
+  
+  <body>
+    <header>
+        <div class=container>
+            <div id=branding>
+                <h1 class=highlight>Wang Industries Inc.</h1>
+            </div>
+        </div>
+        <nav>
+            <div class=dropdown>
+                <button class=dropbtn><a href=../index.html>Home</a></button>
+            </div>
+            <div class=dropdown>
+                <button class="dropbtn current"><a href=../portfolio.html>Portfolio</a></button>
+                <div class="dropdown-content current">
+                    <a href=../projects/thesatchronicles.html>The SAT Chronicles</a>
+                </div>
+            </div>
+            <div class=dropdown>
+                <button class=dropbtn><a href=../merch.html>Merch</a></button>
+                <div class=dropdown-content>
+                    <a href="#">Dagu makkeishī Ramen Noodles™</a>
+                    <a href="#">Dagu makkeishī ChopSticks™</a>
+                    <a href="#">Dagu makkeishī Premium Soysauce Ultra Mega Doug Size™</a>
+                </div>
+            </div>
+            <div class=dropdown>
+                <button class=dropbtn><a href=../about.html>About</a></button>
+            </div>
+            <div class=dropdown>
+                <button class=dropbtn><a href=../dougshrine.html>Doug McCasey Shrine</a></button>
+                <div class=dropdown-content>
+                    <a href=dougthethug.html>Doug the Thug</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <section id=main>
+      <div class=container>
+        <div id=main-col>
+          <h1 align=center>The SAT Chronicles</h1>
+          <p align=center>道格麦凯西是个巨大的迷</p>
+        </div>
+      </div>
+    </section>
+    
+    <script type="text/processing">
+      PImage bg, bg1, dou, topPipe, botPipe, replayButton;
+      int bgx, bgy, dx, dy, g, Vdy;
+      int[] pipeX, pipeY;
+      int gameState, score;
+      float speed;
+
+      void setup(){
+        size(800,700);
+        bg = loadImage("../imgsatchronicles/bg.png");
+        bg1 = loadImage("../imgsatchronicles/startscreen.png");
+        dou = loadImage("../imgsatchronicles/doug.png");
+        botPipe = loadImage("../imgsatchronicles/botpipe.png");
+        topPipe = loadImage("../imgsatchronicles/topPipe.png");
+        replayButton = loadImage("../imgsatchronicles/replaybutton.png");
+        dx = 100;
+        dy = 50;
+        g = 1;
+        speed = 4;
+        pipeX = new int[5];
+        pipeY = new int[pipeX.length];
+        for(int i = 0; i < pipeX.length; i++){
+          pipeX[i] = width + 200*i;
+          pipeY[i] = (int)random(-350, 0);
+        }
+        gameState = -1;
+      }
+      
+      void draw(){
+        if(gameState == -1){
+          startScreen();
+        }
+        if(gameState == 0){
+          setBg();
+          setPipes();
+          moveDoug();
+          scoreCounter();
+        }
+        if(gameState == 1){
+          fill(0);
+          text("You failed the SAT", 20, 500);
+          replay();
+        }
+      }
+      
+      void scoreCounter(){
+        fill(0);
+        textSize(32);
+        text("SAT Score: " + 100*score, width - 300, 40);
+      }
+      
+      
+      void startScreen(){
+        image(bg1, 0, 0);
+        if(mousePressed){
+          dy = height/2;
+          gameState = 0;
+        }
+      }
+      
+      void replay(){
+        image(replayButton, 20, 550);
+      }
+      
+      void setPipes(){
+        for(int i = 0; i < pipeX.length; i++){
+          image(topPipe, pipeX[i], pipeY[i]);
+          image(botPipe, pipeX[i], pipeY[i] + 680);
+          if(score < 8){
+            pipeX[i] -= 4;
+          }
+          else{
+            pipeX[i] -= speed;
+            if(speed < 6){
+              speed = speed + .001;
+            }
+          }
+          if(pipeX[i] < -200){
+            pipeX[i] = width;
+          }
+          if(dx > (pipeX[i] - 45) && dx < pipeX[i] + 70){
+            if(!(dy > pipeY[i] + 450 && dy < pipeY[i] + (450 + 230-49))){
+               gameState = 1;
+            }
+            else if(dx == pipeX[i] || dx == pipeX[i] + 3){
+              score++;
+            }
+          }
+        }
+      }
+      
+      void moveDoug(){
+        image(dou, dx, dy);
+        dy = dy + Vdy;
+        Vdy = Vdy + g;
+        if(dy > height || dy < 0){
+          text("You get accused of cheating", 20, 400);
+          gameState = 1;
+        }
+      }
+
+      
+      void mousePressed(){
+        Vdy = -15;
+        if(mouseX < 70 && mouseX > 20 && mouseY < 600 && mouseY > 500){
+            setup();
+            score = 0;
+        }
+      }
+      
+      void setBg(){
+        image(bg, bgx, bgy);
+        image(bg, bgx + bg.width, bgy);
+        bgx = bgx - 4;
+        if(bgx < -bg.width){
+          bgx = 0;
+        }
+      }
+      
+    </script>
+      <canvas id=canvas style="border: 1px solid black;"></canvas>
+    <footer>
+        <p>Wang Industries Inc., All Rights Reserved, Copyright &copy 2019</p>
+    </footer>
+  </body>
+  
+</html>
