@@ -57,24 +57,31 @@
     </section>
     
     <script type="text/processing">
-      PImage bg, bg1, dou, topPipe, botPipe, replayButton;
-      int bgx, bgy, dx, dy, g, Vdy;
+      PImage bg, sScreen, sButton, infoButton, doug, topPipe, botPipe, replayButton, homeButton, bButton, difficulty, chilldoug, normaldoug, maddoug;
+      int bgx, bgy, dx, dy, g, Vdy, w, h;
       int[] pipeX, pipeY;
-      int gameState, score;
-      float speed;
+      int gameState, score, highScore, speed;
+      boolean displayInfo;
 
       void setup(){
         size(800,700);
         bg = loadImage("../imgsatchronicles/bg.png");
-        bg1 = loadImage("../imgsatchronicles/startscreen.png");
-        dou = loadImage("../imgsatchronicles/doug.png");
-        botPipe = loadImage("../imgsatchronicles/botpipe.png");
+        sScreen = loadImage("../imgsatchronicles/startscreen.png");
+        sButton = loadImage("../imgsatchronicles/testday.png");
+        infoButton = loadImage("../imgsatchronicles/info.png");
+        doug = loadImage("../imgsatchronicles/doug.png");
+        botPipe = loadImage("../imgsatchronicles/botPipe.png");
         topPipe = loadImage("../imgsatchronicles/topPipe.png");
         replayButton = loadImage("../imgsatchronicles/replaybutton.png");
+        homeButton = loadImage("../imgsatchronicles/homebutton.png");
+        bButton = loadImage("../imgsatchronicles/backbutton.png");
+        difficulty = loadImage("../imgsatchronicles/difficulty.png");
+        maddoug = loadImage("../imgsatchronicles/maddoug.png");
+        chilldoug = loadImage("../imgsatchronicles/chilldoug.png");
+        normaldoug = loadImage("../imgsatchronicles/normaldoug.png");
         dx = 100;
-        dy = 50;
+        dy = height/2;
         g = 1;
-        speed = 4;
         pipeX = new int[5];
         pipeY = new int[pipeX.length];
         for(int i = 0; i < pipeX.length; i++){
@@ -88,51 +95,221 @@
         if(gameState == -1){
           startScreen();
         }
+        if(gameState == -2){
+          chooseMode();
+        }
         if(gameState == 0){
           setBg();
           setPipes();
           moveDoug();
           scoreCounter();
+
         }
         if(gameState == 1){
-          fill(0);
-          text("You failed the SAT", 20, 500);
-          replay();
+          endScreen();
         }
       }
       
       void scoreCounter(){
+        if(score>highScore){
+          highScore = score;
+        }
+        fill(109, 146, 232, 200);
+        rect(width - 310, 10, 305, 80, 10);
         fill(0);
         textSize(32);
-        text("SAT Score: " + 100*score, width - 300, 40);
+        text("SAT Score:  " + 100*score, width - 300, 40);  
+        text("High Score: " + 100*highScore, width - 300, 80);   
       }
       
-      
       void startScreen(){
-        image(bg1, 0, 0);
-        if(mousePressed){
-          dy = height/2;
-          gameState = 0;
+        image(sScreen, 0, 0);
+        startButton();
+        info();
+      }
+      
+      void info(){
+        if(mouseX > 96 && mouseX < 96 + infoButton.width && mouseY > 534 && mouseY < 534 + infoButton.height){
+          fill(150, 250, 150);
+          rect(96, 534, 41, 41);
+          displayInfo = true;
+          if(!(mouseX > 96 && mouseX < 96 + infoButton.width && mouseY > 534 && mouseY < 534 + infoButton.height)){
+            displayInfo = false;
+          }
+          if(displayInfo == true){
+            if(w < width/2){
+              w += 30;
+              h += 30;
+             }
+             rect(96, 575 - h, w, h);
+             fill(0);
+             textSize(.09*w);
+             String s = "One day ... You walk into the testing room and you see that Doug is your proctor. Avoid the calculators or get accused of cheating";
+             text(s, 100, 600 - h, w, h);
+          }
         }
+        else{
+          fill(146, 12, 3);
+          rect(96, 534, 41, 41);
+          w = 0;
+          h = 0;
+        }
+        image(infoButton, 94, 532);
+      }
+      
+      void startButton(){
+        fill(146, 12, 3);
+        rect(width/2 - sButton.width/2 - 5, height/2 + 10, sButton.width + 10, 47);
+        fill(255);
+        if(mouseX > width/2 - sButton.width/2 - 5 && mouseX < width/2 + sButton.width/2 + 5 && mouseY > height/2 + 10 && mouseY < height/2 + 57){
+          fill(150, 250, 150);
+          rect(width/2 - sButton.width/2 - 5, height/2 + 10, 177, 47);
+
+          if(mousePressed){
+            gameState = -2;
+          }
+        }
+        image(sButton, width/2 - sButton.width/2, height/2 + 20);
+      }
+      
+      void chooseMode(){
+        image(bg, 0, 0);
+        image(difficulty, width/2 - difficulty.width/2, 55);
+        backButton();
+        easyMode();
+        normalMode();
+        hardMode();
+      }
+      
+      void backButton(){
+        fill(146, 12, 3);
+        triangle(52, 87.5, 90, 52, 90, 123);
+        if(mouseX > 50 && mouseX < 95 && mouseY > 50 && mouseY < 125){
+          fill(150, 250, 150);
+          triangle(52, 87.5, 90, 52, 90, 123);
+          if(mousePressed){
+            gameState = -1;
+          }
+        }
+        image(bButton, 50, 50);
+      }
+      
+      void easyMode(){
+        fill(146, 12, 3);
+        rect(width/2 - 100, height/2 - 160, 200, 50);
+        if(mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height/2 - 160 && mouseY < height/2 - 110){
+          fill(150, 250, 150);
+          rect(width/2 - 100, height/2 - 160, 200, 50);
+          if(mousePressed){
+            speed = 2;
+            dy = height/2;
+            gameState = 0;
+             for(int i = 0; i < pipeX.length; i++){
+                pipeX[i] = width + 200*i;
+                pipeY[i] = (int)random(-350, 0);
+             }
+             score = 0;
+          }
+        }
+        image(chilldoug, width/2 - chilldoug.width/2 + 1, height/2 - 150);
+      }
+      
+      void normalMode(){
+        fill(146, 12, 3);
+        rect(width/2 - 100, height/2 - 50, 200, 50);
+        if(mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height/2 - 50 && mouseY < height/2){
+          fill(150, 250, 150);
+          rect(width/2 - 100, height/2 - 50, 200, 50);
+          if(mousePressed){
+            speed = 4;
+            dy = height/2;
+            gameState = 0;
+             for(int i = 0; i < pipeX.length; i++){
+                pipeX[i] = width + 200*i;
+                pipeY[i] = (int)random(-350, 0);
+             }
+             score = 0;
+          }
+        }
+        image(normaldoug, width/2 - normaldoug.width/2 + 1, height/2 - 40);
+      }
+      
+      void hardMode(){
+        fill(146, 12, 3);
+        rect(width/2 - 100, height/2 + 60, 200, 50);
+        if(mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height/2 + 60 && mouseY < height/2 + 110){
+          fill(150, 250, 150);
+          rect(width/2 - 100, height/2 + 60, 200, 50);
+          if(mousePressed){
+            speed = 6;
+            dy = height/2;
+            gameState = 0;
+             for(int i = 0; i < pipeX.length; i++){
+                pipeX[i] = width + 200*i;
+                pipeY[i] = (int)random(-350, 0);
+             }
+             score = 0;
+          }
+        }
+        image(maddoug, width/2 - maddoug.width/2 + 1, height/2 + 70);
+      }
+      
+      void endScreen(){
+        textSize(32);
+        fill(109, 146, 232, 200);
+        rect(147, 150, 506, 140, 5);
+        fill(0);
+        textSize(40);
+        text("You failed the SAT", 235, 200);
+        textSize(32);
+        text("You got accused of cheating", 200, 250);
+        replay();
+        home();
       }
       
       void replay(){
-        image(replayButton, 20, 550);
+        fill(109, 146, 232, 200);
+        if(mouseX > width/2 - 5 && mouseX < width/2 - 5 + replayButton.width + 10 && mouseY > height/2 - 55 && mouseY < height/2 - 55 + replayButton.height + 10){
+          fill(150, 250, 150, 100);
+        }
+        rect(width/2 - 5, height/2 - 55, replayButton.width + 10, replayButton.height + 10);
+        image(replayButton, width/2, height/2 - 50);
+        if(gameState == 1){
+          if(mouseX > width/2 - 5 && mouseX < width/2 - 5 + replayButton.width + 10 && mouseY > height/2 - 55 && mouseY < height/2 - 55 + replayButton.height + 10){
+            if(mousePressed){
+              dy = height/2;
+              for(int i = 0; i < pipeX.length; i++){
+                pipeX[i] = width + 200*i;
+                pipeY[i] = (int)random(-350, 0);
+              }
+              gameState = 0;
+              score = 0;
+            }
+          }
+        }
+      }
+      
+      void home(){
+        fill(109, 146, 232, 200);
+        if(mouseX > width/2 - 75 && mouseX < width/2 - 75 + homeButton.width + 10 && mouseY > height/2 - 55 && mouseY < height/2 - 55 + homeButton.height + 10){
+          fill(150, 250, 150, 100);
+        }
+        rect(width/2 - 75, height/2 - 55, homeButton.width + 10, homeButton.height + 10);
+        image(homeButton, width/2 - 70, height/2 - 50);
+        if(gameState == 1){
+          if(mouseX > width/2 - 75 && mouseX < width/2 - 75 + homeButton.width + 10 && mouseY > height/2 - 55 && mouseY < height/2 - 55 + homeButton.height + 10){
+            if(mousePressed){
+              gameState = -1;
+            }
+          }
+        } 
       }
       
       void setPipes(){
         for(int i = 0; i < pipeX.length; i++){
           image(topPipe, pipeX[i], pipeY[i]);
           image(botPipe, pipeX[i], pipeY[i] + 680);
-          if(score < 8){
-            pipeX[i] -= 4;
-          }
-          else{
-            pipeX[i] -= speed;
-            if(speed < 6){
-              speed = speed + .001;
-            }
-          }
+          pipeX[i] -= speed;
           if(pipeX[i] < -200){
             pipeX[i] = width;
           }
@@ -140,7 +317,7 @@
             if(!(dy > pipeY[i] + 450 && dy < pipeY[i] + (450 + 230-49))){
                gameState = 1;
             }
-            else if(dx == pipeX[i] || dx == pipeX[i] + 3){
+            if(dx == pipeX[i] || dx == pipeX[i] + 3){
               score++;
             }
           }
@@ -148,35 +325,30 @@
       }
       
       void moveDoug(){
-        image(dou, dx, dy);
+        image(doug, dx, dy);
         dy = dy + Vdy;
         Vdy = Vdy + g;
         if(dy > height || dy < 0){
-          text("You get accused of cheating", 20, 400);
           gameState = 1;
         }
       }
 
-      
       void mousePressed(){
         Vdy = -15;
-        if(mouseX < 70 && mouseX > 20 && mouseY < 600 && mouseY > 500){
-            setup();
-            score = 0;
-        }
       }
-      
+          
       void setBg(){
         image(bg, bgx, bgy);
         image(bg, bgx + bg.width, bgy);
-        bgx = bgx - 4;
+        bgx = bgx - speed;
         if(bgx < -bg.width){
           bgx = 0;
         }
       }
-      
+     
     </script>
       <canvas id=canvas style="border: 1px solid black;"></canvas>
+      
     <footer>
         <p>Wang Industries Inc., All Rights Reserved, Copyright &copy 2019</p>
     </footer>
